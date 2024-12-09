@@ -11,9 +11,10 @@ import {
 } from '@mui/material';
 import { SentimentVeryDissatisfied, SentimentDissatisfied, SentimentNeutral, SentimentSatisfied, SentimentVerySatisfied } from '@mui/icons-material';
 import { collection, addDoc, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import { db } from '../config/firebase.ts';
 import { format } from 'date-fns';
-import type { MoodEntry } from '../types';
+import type { MoodEntry } from '../types/index.ts';
+import { useAuth } from '../contexts/AuthContext.tsx';
 
 const moodIcons = [
   <SentimentVeryDissatisfied />,
@@ -27,15 +28,23 @@ const MoodTracker: React.FC = () => {
   const [mood, setMood] = useState<number>(3);
   const [note, setNote] = useState<string>('');
   const [recentMoods, setRecentMoods] = useState<MoodEntry[]>([]);
+  const { user } = useAuth();
 
   useEffect(() => {
-    fetchRecentMoods();
-  }, []);
+    if (user) {
+      fetchRecentMoods();
+    }
+  }, [user]);
 
   const fetchRecentMoods = async () => {
     try {
       const moodsRef = collection(db, 'moods');
-      const q = query(moodsRef, orderBy('timestamp', 'desc'), limit(5));
+      const q = query(
+        moodsRef,
+        where('userId', '==', user?.uid),
+        orderBy('timestamp', 'desc'),
+        limit(5)
+      );
       const querySnapshot = await getDocs(q);
       
       const moods: MoodEntry[] = [];
@@ -50,12 +59,14 @@ const MoodTracker: React.FC = () => {
   };
 
   const handleSubmit = async () => {
+    if (!user) return;
+
     try {
       const moodEntry = {
         mood,
         note,
         timestamp: new Date(),
-        userId: 'temp-user-id', // Replace with actual user ID when auth is implemented
+        userId: user.uid,
       };
 
       await addDoc(collection(db, 'moods'), moodEntry);

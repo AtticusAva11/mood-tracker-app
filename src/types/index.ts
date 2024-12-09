@@ -6,7 +6,8 @@ export interface MoodEntry {
   userId: string;
 }
 
-export interface User {
+export interface AuthUser {
   id: string;
-  email: string;
+  email: string | null;
+  displayName: string | null;
 }
