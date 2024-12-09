@@ -3,13 +3,12 @@ import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  // Replace with your Firebase configuration
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID
+  apiKey: "AIzaSyAYBsWxhlwMpKvKxZ-f41cPGvHdIAusgEI",
+  authDomain: "moodtracker2-cfb9b.firebaseapp.com",
+  projectId: "moodtracker2-cfb9b",
+  storageBucket: "moodtracker2-cfb9b.firebasestorage.app",
+  messagingSenderId: "290182061913",
+  appId: "1:290182061913:web:d0e6058c29e80d76aff648"
 };
 
 const app = initializeApp(firebaseConfig);
